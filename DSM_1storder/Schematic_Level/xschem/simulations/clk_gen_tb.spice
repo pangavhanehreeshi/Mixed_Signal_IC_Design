@@ -1,0 +1,76 @@
+** sch_path: /foss/designs/drms-elie3/3_real_circuits/clk_gen_tb.sch
+**.subckt clk_gen_tb
+VDD VDD GND {Vdd}
+VCK clk GND PULSE(0 3 10n 1n 1n 500n 1000n)
+x1 phi1 phi1_d clk phi2 phi2_d clk_gen
+**** begin user architecture code
+
+
+.param Vdd=3
+
+
+
+
+.option temp=27
+
+.control
+option sparse
+save all
+tran 1n 3000n
+write clk_gen_tb.raw
+plot v(clk)
+plot v(phi1) v(phi2)
+plot v(phi1_d) v(phi2_d)
+plot v(phi1)*v(phi2)
+.endc
+
+
+
+.lib cornerMOShv.lib mos_tt
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  /foss/designs/drms-elie3/3_real_circuits/clk_gen.sym # of pins=5
+** sym_path: /foss/designs/drms-elie3/3_real_circuits/clk_gen.sym
+** sch_path: /foss/designs/drms-elie3/3_real_circuits/clk_gen.sch
+.subckt clk_gen phi1 phi1_d CK phi2 phi2_d
+*.ipin CK
+*.opin phi1
+*.opin phi1_d
+*.opin phi2_d
+*.opin phi2
+xn1 net8 CK net1 VDD VSS sg13g2_nand2_2
+xi3 net9 net8 VDD VSS sg13g2_inv_4
+xi1 net11 net9 VDD VSS sg13g2_inv_4
+xi2 phi2_d net1 VDD VSS sg13g2_inv_4
+xi4 phi1_d net2 VDD VSS sg13g2_inv_4
+xi5 net13 net12 VDD VSS sg13g2_inv_4
+xi6 net3 CK VDD VSS sg13g2_inv_4
+xi7 net6 net4 VDD VSS sg13g2_inv_4
+xi8 net7 net6 VDD VSS sg13g2_inv_4
+xn2 net4 net2 net3 VDD VSS sg13g2_nand2_2
+xn3 net5 net7 net4 VDD VSS sg13g2_nand2_2
+xn4 net10 net8 net11 VDD VSS sg13g2_nand2_2
+x1 net9 phi1 buffer
+x2 net10 phi1_d buffer
+x3 net5 phi2_d buffer
+x4 net6 phi2 buffer
+.ends
+
+
+* expanding   symbol:  /foss/designs/drms-elie3/3_real_circuits/buffer.sym # of pins=2
+** sym_path: /foss/designs/drms-elie3/3_real_circuits/buffer.sym
+** sch_path: /foss/designs/drms-elie3/3_real_circuits/buffer.sch
+.subckt buffer A X
+*.ipin A
+*.opin X
+XM2 net1 A GND GND sg13_hv_nmos w=0.3u l=0.45u ng=1 m=1
+XM1 net1 A VDD VDD sg13_hv_pmos w=0.3u l=0.4u ng=1 m=1
+XM3 X net1 GND GND sg13_hv_nmos w=0.3u l=0.45u ng=1 m=1
+XM4 X net1 VDD VDD sg13_hv_pmos w=0.3u l=0.4u ng=1 m=1
+.ends
+
+.GLOBAL VDD
+.GLOBAL GND
+.end

@@ -1,0 +1,51 @@
+** sch_path: /foss/designs/CEMS_DSM/CEMS_G2/DSM/Schematics/Ideal_Circuits/IDEAL_DSM.sch
+**.subckt IDEAL_DSM
+Vcm Vcm GND dc {vdd/2}
+Vin Vin GND SIN(0 0.7 80 0 0 0)
+Vp1 p1 GND dc 0 pulse(0, {vdd}, 0, 100n, 100n, 2u, 4.5u)
+Vp2 p2 GND dc 0 pulse(0, {vdd}, 2.25u, 100n, 100n, 2u, 4.5u)
+S1 Vin net1 p1 GND mysw
+S2 net4 net2 p2 GND mysw
+S3 net1 net3 p2 GND mysw
+S4 net2 Vcm p1 GND mysw
+C7 net1 net2 0.3p m=1
+C1 net4 vo1 2.06p m=1
+S5 vo1 net5 p2 GND mysw
+S6 net7 net6 p1 GND mysw
+S7 net5 net3 p1 GND mysw
+S8 net6 Vcm p2 GND mysw
+C2 net5 net6 0.2p m=1
+C3 net7 vo2 0.7p m=1
+E3 vcmp GND TABLE {V(vo2,0)} = (-0.1mV, 0V) (0.1mV, {vdd})
+x2 net3 vcmp 1.5 0 sg13g2_inv_1
+Vsup VDD GND dc {vdd}
+Vss VSS GND dc 0
+G1 vo1 GND net4 Vcm 1e-6
+G2 vo2 GND net7 Vcm 1e-6
+**** begin user architecture code
+
+.lib /foss/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt
+.lib /foss/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerRES.lib res_typ
+.inc /foss/pdks/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice
+
+
+.param temp=27 vdd = 1.5
+.model mysw SW vt={vdd/2} ron=0.1
+.option method=gear reltol=1e-4
+
+.control
+save all
+run
+tran 1u 20m
+plot vcmp
+set wr_singlescale
+set wr_vecnames
+wrdata IDEAL_SwitchCap.txt vo1 p1 p2
+.endc
+
+**** end user architecture code
+**.ends
+.GLOBAL GND
+.GLOBAL VDD
+.GLOBAL VSS
+.end

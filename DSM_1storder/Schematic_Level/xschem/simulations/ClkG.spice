@@ -1,0 +1,18 @@
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_1storder/xschem/ClkG.sch
+**.subckt ClkG p1 clkin p2
+*.ipin clkin
+*.opin p1
+*.opin p2
+xn1 net2 clkin net1 VDD VSS sg13g2_nand2_2
+xi2 clkinb clkin VDD VSS sg13g2_inv_2
+xn2 net1 net2 clkinb VDD VSS sg13g2_nand2_2
+xi3 p1 net2 VDD VSS sg13g2_inv_4
+xi4 p2 net1 VDD VSS sg13g2_inv_4
+**** begin user architecture code
+
+.lib /foss/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt
+.inc /foss/pdks/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice
+
+**** end user architecture code
+**.ends
+.end

@@ -1,0 +1,48 @@
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_1storder/xschem/tb_ClkG.sch
+**.subckt tb_ClkG
+Vsup VDD GND dc {vdd}
+Vss VSS GND dc 0
+Vp1 clkin GND dc 0 pulse(0, {vdd}, 0, 100p, 100p, 2.25n, 4.5n)
+C4 p2 GND {cl} m=1
+C5 p1 GND {cl} m=1
+x1 clkin p1 p2 ClkG
+**** begin user architecture code
+
+
+.param temp=27 vdd=3 per=4.5n cl=25f
+.option method=gear
+
+.control
+save all
+tran 10p 15n
+meas tran tp1_p2  TRIG v(p1)  VAL=0.6 FALL=1 TARG v(p2) VAL=0.6 RISE=1
+plot p1 p2
+write tb_clkgen.raw
+.endc
+
+
+
+.lib /foss/pdks/ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt
+.inc /foss/pdks/ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  ClkG.sym # of pins=3
+** sym_path: /foss/designs/ChipAcharya/DSM/DSM_1storder/xschem/ClkG.sym
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_1storder/xschem/ClkG.sch
+.subckt ClkG clkin p1 p2
+*.ipin clkin
+*.opin p1
+*.opin p2
+xn1 net2 clkin net1 VDD VSS sg13g2_nand2_2
+xi2 clkinb clkin VDD VSS sg13g2_inv_2
+xn2 net1 net2 clkinb VDD VSS sg13g2_nand2_2
+xi3 p1 net2 VDD VSS sg13g2_inv_4
+xi4 p2 net1 VDD VSS sg13g2_inv_4
+.ends
+
+.GLOBAL GND
+.GLOBAL VDD
+.GLOBAL VSS
+.end
