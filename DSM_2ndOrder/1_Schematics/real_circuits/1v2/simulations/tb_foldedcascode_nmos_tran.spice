@@ -1,0 +1,104 @@
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/1v2/tb_foldedcascode_nmos_tran.sch
+**.subckt tb_foldedcascode_nmos_tran
+Vdd v_dd GND 1.5
+Vss v_ss GND 0
+C1 v_out v_ss 1p m=1
+Vin v_in v_ss dc 0.8 ac 1
+.save v(v_in)
+.save v(v_out)
+Venable v_ena v_ss dc 0 pwl(0 0 1u 0 1.1u 1.5)
+.save v(v_ena)
+I0 v_dd net1 dc 0 pwl(0 0 1.1u 0 1.2u 14u)
+x1 v_dd net1 v_out v_out v_in v_ena v_ss foldedcascode_nmos
+**** begin user architecture code
+ .lib cornerMOSlv.lib mos_tt
+
+
+
+.temp 27
+
+.ic v(v_out)=0
+.option method=gear
+
+.control
+option sparse
+save all
+
+tran 0.005u 15u uic
+plot v_ena v_out
+
+* Settling time measurements
+let vout_limit = 0.8*0.99
+meas tran tcross WHEN v(v_out)=vout_limit
+let vena_limit = 0.5*1.5
+meas tran tstart WHEN v(v_ena)=vena_limit
+let tsettle = tcross - tstart
+print tsettle
+
+remzerovec
+write tb_foldedcascode_nmos_tran.raw
+
+.endc
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  foldedcascode_nmos.sym # of pins=7
+** sym_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/1v2/foldedcascode_nmos.sym
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/1v2/foldedcascode_nmos.sch
+.subckt foldedcascode_nmos AVDD IBIAS VOUT MINUS PLUS D_ENA AVSS
+*.ipin AVSS
+*.ipin IBIAS
+*.ipin AVDD
+*.ipin PLUS
+*.ipin MINUS
+*.opin VOUT
+*.ipin D_ENA
+XM23 IBIAS net3 AVSS AVSS sg13_lv_nmos w=8.5u l=5u ng=4 m=1
+XM25 IBIAS net2 net3 AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XM24 net10 net3 AVSS AVSS sg13_lv_nmos w=8.5u l=5u ng=4 m=1
+XM19 net10 net5 net4 AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM20 net4 net4 AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM21 AVSS net5 net8 AVDD sg13_lv_pmos w=14u l=0.5u ng=4 m=1
+XM22 net8 net4 AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM26 net7 net4 AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM27 net5 net8 net7 AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM28 net5 net15 net6 AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM29 net6 net5 AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM30 net9 net3 AVSS AVSS sg13_lv_nmos w=8.5u l=5u ng=4 m=1
+XM31 net7 PLUS net9 AVSS sg13_lv_nmos w=6u l=1u ng=2 m=1
+XM32 net11 MINUS net9 AVSS sg13_lv_nmos w=6u l=1u ng=2 m=1
+XM42 AVDD net4 AVDD AVDD sg13_lv_pmos w=12u l=0.5u ng=4 m=1
+XM41 AVDD net8 AVDD AVDD sg13_lv_pmos w=12u l=0.5u ng=4 m=1
+XM38 AVSS net3 AVSS AVSS sg13_lv_nmos w=8u l=1u ng=4 m=1
+XM33 net1 D_ENA AVDD AVDD sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XM34 net2 net1 AVDD AVDD sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XM35 net1 D_ENA AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XM36 net2 net1 AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XM37 net11 AVSS AVSS AVSS sg13_lv_nmos w=6u l=1u ng=2 m=1
+XM39 VOUT net8 net11 AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM40 net11 net4 AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM43 VOUT net15 net12 AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM44 net12 net5 AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM45 net12 AVSS AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM46 VOUT AVSS AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM47 net11 AVDD AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM48 VOUT AVDD AVDD AVDD sg13_lv_pmos w=7u l=2u ng=2 m=1
+XM49 net13 net4 AVDD AVDD sg13_lv_pmos w=14u l=2u ng=4 m=1
+XM50 net13 VOUT net14 AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM51 net14 net14 AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM52 net15 net14 AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM53 AVDD VOUT net15 AVSS sg13_lv_nmos w=15u l=0.5u ng=4 m=1
+XM54 AVSS net15 AVSS AVSS sg13_lv_nmos w=8u l=1u ng=4 m=1
+XM55 net5 net1 AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XM56 net7 AVSS AVSS AVSS sg13_lv_nmos w=6u l=1u ng=2 m=1
+XM57 net5 AVDD AVDD AVDD sg13_lv_pmos w=7u l=2u ng=2 m=1
+XM58 net6 AVSS AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM59 net5 AVSS AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+XM60 net4 AVDD AVDD AVDD sg13_lv_pmos w=7u l=2u ng=2 m=1
+XM61 net14 AVSS AVSS AVSS sg13_lv_nmos w=3u l=2u ng=2 m=1
+.ends
+
+.GLOBAL GND
+.end

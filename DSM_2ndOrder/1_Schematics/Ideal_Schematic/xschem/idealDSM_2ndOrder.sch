@@ -99,13 +99,13 @@ footprint=1206
 device="ceramic capacitor"}
 C {lab_wire.sym} 1220 -580 0 0 {name=p6 sig_type=std_logic lab=ph1}
 C {switch_ngspice.sym} 1510 -580 0 0 {name=S2 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 1440 -580 0 0 {name=p8 sig_type=std_logic lab=ph2}
 C {switch_ngspice.sym} 1260 -370 0 0 {name=S3 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 1190 -370 0 0 {name=p10 sig_type=std_logic lab=ph2}
 C {switch_ngspice.sym} 1510 -370 0 0 {name=S4 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 1440 -370 0 0 {name=p12 sig_type=std_logic lab=ph1}
 C {devices/code_shown.sym} 540 -650 0 0 {name=MODEL only_toplevel=true
 
@@ -115,7 +115,7 @@ value="
 save all 
 
 
-tran 100n 0.1ms 0 20n uic
+tran 100n 0.2ms 0 20n uic
 plot v(VIN) 
 plot v(VOUT)
 plot v(q)
@@ -131,13 +131,13 @@ C {devices/gnd.sym} 1260 -850 0 0 {name=l2 lab=GND}
 C {devices/vsource.sym} 1260 -900 0 0 {name=VCM1 value="dc \{vdd/2\}"}
 C {devices/vdd.sym} 1260 -970 0 0 {name=l12 lab=VCM}
 C {devices/gnd.sym} 1600 -850 0 0 {name=l16 lab=GND}
-C {devices/vsource.sym} 1600 -900 0 0 {name=Vph2 value="PULSE(0V 3V 2.25us 100ns 100ns 2us 4.5us)"}
+C {devices/vsource.sym} 1600 -900 0 0 {name=Vph2 value="PULSE(0V \{vdd\} 2.25us 100ns 100ns 2us 4.5us)"}
 C {devices/vdd.sym} 1600 -970 0 0 {name=l17 lab=ph2}
 C {devices/gnd.sym} 1510 -850 0 0 {name=l4 lab=GND}
-C {devices/vsource.sym} 1510 -900 0 0 {name=Vph1 value="PULSE(0V 3V 0ns 100ns 100ns 2us 4.5us)"}
+C {devices/vsource.sym} 1510 -900 0 0 {name=Vph1 value="PULSE(0V \{vdd\} 0ns 100ns 100ns 2us 4.5us)"}
 C {devices/vdd.sym} 1510 -970 0 0 {name=l5 lab=ph1}
 C {lab_wire.sym} 1260 -610 0 0 {name=p1 sig_type=std_logic lab=VIN}
-C {devices/code_shown.sym} 220 -280 0 0 {name=MODEL1 only_toplevel=true
+C {devices/code_shown.sym} 530 -160 0 0 {name=MODEL1 only_toplevel=true
 format="tcleval( @value )"
 value="
 .lib $::SG13G2_MODELS/cornerMOSlv.lib mos_tt
@@ -152,19 +152,19 @@ footprint=1206
 device="ceramic capacitor"}
 C {lab_wire.sym} 1880 -620 0 1 {name=p3 sig_type=std_logic lab=VOUT}
 C {devices/lab_wire.sym} 3360 -600 0 1 {name=p5 sig_type=std_logic lab=vcmp}
-C {sg13g2_stdcells/sg13g2_dfrbp_1.sym} 3670 -600 0 0 {name=x1 VDD=VDD VSS=VSS prefix=sg13g2_ }
+C {sg13g2_stdcells/sg13g2_dfrbp_1.sym} 3670 -600 0 0 {name=x1 VDD=1.5 VSS=0 prefix=sg13g2_ }
 C {devices/lab_wire.sym} 3550 -620 0 0 {name=p7 sig_type=std_logic lab=ph1}
 C {devices/lab_wire.sym} 3550 -580 0 0 {name=p14 sig_type=std_logic lab=resb}
 C {devices/lab_wire.sym} 3790 -620 0 0 {name=p15 sig_type=std_logic lab=q}
 C {devices/gnd.sym} 1970 -850 0 0 {name=l20 lab=GND}
 C {devices/vsource.sym} 1970 -900 0 0 {name=Vresb value="dc 0 pwl(0, 0, \{per/2\}, 0, \{per/2+100p\} \{vdd\})"}
 C {devices/lab_wire.sym} 1970 -970 0 0 {name=p4 sig_type=std_logic lab=resb}
-C {sg13g2_stdcells/sg13g2_inv_1.sym} 2820 -210 0 1 {name=x2 VDD=3 VSS=0 prefix=sg13g2_ }
+C {sg13g2_stdcells/sg13g2_inv_1.sym} 2820 -210 0 1 {name=x2 VDD=1.5 VSS=0 prefix=sg13g2_ }
 C {devices/lab_wire.sym} 3360 -580 0 1 {name=p9 sig_type=std_logic lab=ph2}
 C {lab_wire.sym} 3360 -620 0 1 {name=p11 sig_type=std_logic lab=VDD}
 C {lab_wire.sym} 3060 -620 0 0 {name=p13 sig_type=std_logic lab=VCM}
 C {switch_ngspice.sym} 1260 -580 0 0 {name=S1 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1  VH=0 RON=0.1 ROFF=100M)"}
 C {vcvs.sym} 940 -860 0 0 {name=Etrip value=\{Etrip\}}
 C {gnd.sym} 940 -810 0 0 {name=l6 lab=GND}
 C {lab_wire.sym} 930 -900 0 0 {name=p20 sig_type=std_logic lab=trip}
@@ -174,21 +174,18 @@ value="
 .param Etrip=0.5
 .param per=1u
 .param temp=27
-.param vdd=3
+.param vdd=1.5
 "}
 C {lab_wire.sym} 1220 -560 0 0 {name=p16 sig_type=std_logic lab=trip}
 C {lab_wire.sym} 1220 -350 0 0 {name=p17 sig_type=std_logic lab=trip}
 C {lab_wire.sym} 1470 -560 0 0 {name=p18 sig_type=std_logic lab=trip}
 C {lab_wire.sym} 1470 -350 0 0 {name=p19 sig_type=std_logic lab=trip}
 C {vsource.sym} 1370 -940 0 0 {name=Vin 
-value="SINE(1.5 1.4 80)" 
+value="SINE(\{vdd/2\} 0.7 80)" 
 savecurrent=false}
 C {lab_wire.sym} 1360 -980 0 0 {name=p21 sig_type=std_logic lab=VIN}
 C {gnd.sym} 1370 -890 0 0 {name=l3 lab=GND}
 C {lab_wire.sym} 1510 -300 0 0 {name=p22 sig_type=std_logic lab=VCM}
-C {ideal_opamp.sym} 1860 -570 0 0 {name=x3}
-C {ideal_comparator.sym} 3210 -600 0 0 {name=x5}
-C {ideal_opamp.sym} 2800 -590 0 0 {name=x4}
 C {capa.sym} 2380 -410 3 0 {name=C3
 m=1
 value=1p
@@ -196,16 +193,16 @@ footprint=1206
 device="ceramic capacitor"}
 C {lab_wire.sym} 2230 -550 0 0 {name=p23 sig_type=std_logic lab=ph2}
 C {switch_ngspice.sym} 2520 -550 0 0 {name=S5 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 2450 -550 0 0 {name=p24 sig_type=std_logic lab=ph1}
 C {switch_ngspice.sym} 2270 -340 0 0 {name=S6 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 2200 -340 0 0 {name=p25 sig_type=std_logic lab=ph1}
 C {switch_ngspice.sym} 2520 -340 0 0 {name=S7 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 2450 -340 0 0 {name=p27 sig_type=std_logic lab=ph2}
 C {switch_ngspice.sym} 2270 -550 0 0 {name=S8 model=SW1
-device_model=".MODEL SW1 SW(VT=0.5 VH=0 RON=0.1 ROFF=100M)"}
+device_model=".MODEL SW1 SW(VT=0.1 VH=0 RON=0.1 ROFF=100M)"}
 C {lab_wire.sym} 2230 -530 0 0 {name=p29 sig_type=std_logic lab=trip}
 C {lab_wire.sym} 2230 -320 0 0 {name=p30 sig_type=std_logic lab=trip}
 C {lab_wire.sym} 2480 -530 0 0 {name=p31 sig_type=std_logic lab=trip}
@@ -217,3 +214,6 @@ m=1
 value=3p
 footprint=1206
 device="ceramic capacitor"}
+C {/foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/Ideal_Schematic/xschem/ideal_opamp.sym} 1860 -570 0 0 {name=x3}
+C {/foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/Ideal_Schematic/xschem/ideal_opamp.sym} 2800 -590 0 0 {name=x4}
+C {/foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/Ideal_Schematic/xschem/ideal_comparator.sym} 3210 -600 0 0 {name=x5}

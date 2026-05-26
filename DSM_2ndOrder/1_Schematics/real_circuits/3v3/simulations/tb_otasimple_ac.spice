@@ -1,0 +1,109 @@
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/tb_otasimple_ac.sch
+**.subckt tb_otasimple_ac
+Vss v_ss GND 0
+Vdd v_dd GND 1.5
+Vin v_in v_ss dc 0.7 ac 0.8
+.save v(v_in)
+I0 v_dd net2 301.5e-06
+C1 v_out v_ss 1p m=1
+.save v(v_out)
+Venable v_ena v_ss 1.5
+x1 v_dd v_cm net1 v_out net2 v_ena v_ss ota1_simple
+C2 net1 v_out 6p m=1
+C3 v_in net1 1p m=1
+Vdd1 v_cm GND 0.75
+**** begin user architecture code
+ .lib cornerMOSlv.lib mos_tt
+
+
+
+
+
+.temp 27
+.control
+option sparse
+save all
+
+* ---------- AC analysis ----------
+op
+ac dec 101 1k 1G
+
+* Make sure the current plot is the AC plot
+setplot ac1
+remzerovec
+
+* Measurements on AC
+meas ac dcgain MAX vmag(v_out) FROM=10 TO=10k
+let f3db = dcgain/sqrt(2)
+meas ac fbw WHEN vmag(v_out)=f3db FALL=1
+let gainerror=(dcgain-1)/1
+print dcgain
+print fbw
+print gainerror
+
+* (optional) interactive plots inside ngspice
+plot 20*log10(v_out)
+plot 180/pi*ph(v_out) vs frequency
+
+* Write ONLY the AC plot to this file
+write tb_foldedcascode_nmos_2_ac.raw
+
+* ---------- Noise analysis ----------
+noise v(v_out) Vin dec 101 1k 100MEG
+print onoise_total
+
+* Make sure current plot is the noise plot
+setplot noise1
+
+* Write the noise plot to a separate file
+write tb_foldedcascode_nmos_noise.raw
+
+.endc
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  ota1_simple.sym # of pins=7
+** sym_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/ota1_simple.sym
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/ota1_simple.sch
+.subckt ota1_simple AVDD PLUS MINUS VOUT IBIAS D_ENA AVSS
+*.opin VOUT
+*.ipin MINUS
+*.ipin PLUS
+*.ipin AVSS
+*.ipin IBIAS
+*.ipin AVDD
+*.ipin D_ENA
+XM01 net9 PLUS net1 AVSS sg13_lv_nmos w=161.5u l=2u ng=17 m=1
+XM02 net10 MINUS net1 AVSS sg13_lv_nmos w=161.5u l=2u ng=17 m=1
+XMt net1 net6 AVSS AVSS sg13_lv_nmos w=38u l=1u ng=4 m=1
+XM08 VOUT net2 net5 AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XM07 net3 net2 net4 AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XM03 net4 net3 AVSS AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XM04 net5 net3 AVSS AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XMb1 net11 net6 AVSS AVSS sg13_lv_nmos w=38u l=1u ng=4 m=1
+XM05 net3 net7 net9 AVDD sg13_lv_pmos w=385u l=1.5u ng=39 m=1
+XM06 VOUT net7 net10 AVDD sg13_lv_pmos w=385u l=1.5u ng=39 m=1
+XM09 net9 net8 AVDD AVDD sg13_lv_pmos w=500u l=1.5u ng=50 m=1
+XM10 net10 net8 AVDD AVDD sg13_lv_pmos w=500u l=1.5u ng=50 m=1
+XMb IBIAS net6 AVSS AVSS sg13_lv_nmos w=38u l=1u ng=4 m=1
+XMb2 net11 net3 net8 AVDD sg13_lv_pmos w=385u l=1.5u ng=39 m=1
+XMb3 net8 net8 AVDD AVDD sg13_lv_pmos w=385u l=1.5u ng=39 m=1
+XMb5 net7 net8 AVDD AVDD sg13_lv_pmos w=385u l=1.5u ng=39 m=1
+XMb4 AVSS net3 net7 AVDD sg13_lv_pmos w=50u l=0.5u ng=5 m=1
+XMb10 AVDD VOUT net2 AVSS sg13_lv_nmos w=0.15u l=0.13u ng=1 m=1
+XMb9 net2 net12 AVSS AVSS sg13_lv_nmos w=0.15u l=0.13u ng=1 m=1
+XMb7 net8 VOUT net12 AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XMb8 net12 net12 AVSS AVSS sg13_lv_nmos w=95u l=1.5u ng=10 m=1
+XMb6 net8 net8 AVDD AVDD sg13_lv_pmos w=500u l=1.5u ng=50 m=1
+XMe5 IBIAS net14 net6 AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XMe2 net13 D_ENA AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XMe4 net14 net13 AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XMe6 net3 net13 AVSS AVSS sg13_lv_nmos w=1u l=0.13u ng=1 m=1
+XMe3 net14 net13 AVDD AVDD sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+XMe1 net13 D_ENA AVDD AVDD sg13_lv_pmos w=1u l=0.13u ng=1 m=1
+.ends
+
+.GLOBAL GND
+.end

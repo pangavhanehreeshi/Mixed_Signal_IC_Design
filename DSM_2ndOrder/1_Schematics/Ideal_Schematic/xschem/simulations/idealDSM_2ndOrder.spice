@@ -32,7 +32,7 @@ C4 net7 net8 3p m=1
 save all
 
 
-tran 100n 0.1ms 0 20n uic
+tran 100n 1.5ms 0 20n uic
 plot v(VIN)
 plot v(VOUT)
 plot v(q)

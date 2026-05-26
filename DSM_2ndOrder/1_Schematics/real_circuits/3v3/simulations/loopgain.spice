@@ -1,0 +1,127 @@
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/loopgain.sch
+**.subckt loopgain
+x1 v_dd net1 net2 vmeas2 v_in v_ena v_ss OTA1
+Vin v_in v_ss dc 1.5
+Vdd v_dd GND dc 3.3
+I7 v_dd net1 40u
+C1 net2 v_ss 2p m=1
+Itest1 v_ss vmeas2 dc 0 ac 1
+Vtest1 vmeas2 net3 dc 0 ac 0
+Vimeas4 net2 net3 0
+.save i(vimeas4)
+Venable v_ena v_ss dc 3.3
+x2 v_dd net4 net5 vmeas1 v_in v_ena v_ss OTA1
+I1 v_dd net4 40u
+C2 net5 v_ss 2p m=1
+Itest2 v_ss vmeas1 dc 0 ac 0
+Vtest2 vmeas1 net6 dc 0 ac 1
+Vimeas3 net5 net6 0
+.save i(vimeas3)
+Vss v_ss GND 0
+**** begin user architecture code
+
+
+
+
+.param temp=27
+.options savecurrents reltol=1e-3 abstol=1e-12 gmin=1e-15
+.control
+save all
+
+* Operating Point Analysis
+op
+
+* AC Analysis
+ac dec 101 1 100G
+remzerovec
+
+
+
+* Tian's Method
+*vtest=0, itest=1:
+let A = i(Vimeas2)
+let C = v(vmeas2)
+
+*vtest=1, itest=0:
+let B = i(Vimeas1)
+let D = v(vmeas1)
+let ttian = (A*D - B*C - A)/(2*(B*C - A*D) + A - D + 1)
+
+* optional interactive plots
+
+plot db(ttian) ylabel 'Magnitude - Tian'
+plot 180/pi*cphase(ttian) ylabel 'Phase - Tian'
+
+
+
+* SINGLE clean write at the end
+write foldedcascode_nmos_tb-loopgain.raw
+
+.endc
+
+
+
+.lib cornerMOShv.lib mos_tt
+.lib cornerRES.lib res_typ
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  OTA1.sym # of pins=7
+** sym_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/OTA1.sym
+** sch_path: /foss/designs/ChipAcharya/DSM/DSM_2ndOrder/1_Schematics/real_circuits/OTA1.sch
+.subckt OTA1 AVDD IBIAS VOUT MINUS PLUS D_ENA AVSS
+*.ipin AVSS
+*.ipin IBIAS
+*.ipin AVDD
+*.ipin PLUS
+*.ipin MINUS
+*.opin VOUT
+*.ipin D_ENA
+XM23 IBIAS net3 AVSS AVSS sg13_hv_nmos w=13.8u l=1u ng=2 m=1
+XM25 IBIAS net2 net3 AVSS sg13_hv_nmos w=1u l=0.5u ng=1 m=1
+XM24 net10 net3 AVSS AVSS sg13_hv_nmos w=13.8u l=1u ng=2 m=1
+XM19 net10 net5 net4 AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM20 net4 net4 AVDD AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM21 AVSS net5 net8 AVDD sg13_hv_pmos w=100u l=0.5u ng=10 m=1
+XM22 net8 net4 AVDD AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM26 net7 net4 AVDD AVDD sg13_hv_pmos w=85.5u l=1u ng=10 m=1
+XM27 net5 net8 net7 AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM28 net5 net15 net6 AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM29 net6 net5 AVSS AVSS sg13_hv_nmos w=12.5u l=1u ng=2 m=1
+XM30 net9 net3 AVSS AVSS sg13_hv_nmos w=14u l=1u ng=2 m=1
+XM31 net7 PLUS net9 AVSS sg13_hv_nmos w=14.5u l=0.8u ng=2 m=1
+XM32 net11 MINUS net9 AVSS sg13_hv_nmos w=14.5u l=0.8u ng=2 m=1
+XM42 AVDD net4 AVDD AVDD sg13_hv_pmos w=12u l=0.5u ng=4 m=1
+XM41 AVDD net8 AVDD AVDD sg13_hv_pmos w=12u l=0.5u ng=4 m=1
+XM38 AVSS net3 AVSS AVSS sg13_hv_nmos w=8u l=1u ng=4 m=1
+XM33 net1 D_ENA AVDD AVDD sg13_hv_pmos w=1u l=0.5u ng=1 m=1
+XM34 net2 net1 AVDD AVDD sg13_hv_pmos w=1u l=0.5u ng=1 m=1
+XM35 net1 D_ENA AVSS AVSS sg13_hv_nmos w=1u l=0.5u ng=1 m=1
+XM36 net2 net1 AVSS AVSS sg13_hv_nmos w=1u l=0.5u ng=1 m=1
+XM37 net11 AVSS AVSS AVSS sg13_hv_nmos w=14.5u l=0.8u ng=2 m=1
+XM39 VOUT net8 net11 AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM40 net11 net4 AVDD AVDD sg13_hv_pmos w=85.5u l=1u ng=10 m=1
+XM43 VOUT net15 net12 AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM44 net12 net5 AVSS AVSS sg13_hv_nmos w=12.5u l=1u ng=2 m=1
+XM45 net12 AVSS AVSS AVSS sg13_hv_nmos w=12.5u l=1u ng=2 m=1
+XM46 VOUT AVSS AVSS AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM47 net11 AVDD AVDD AVDD sg13_hv_pmos w=85.5u l=1u ng=10 m=1
+XM48 VOUT AVDD AVDD AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM49 net13 net4 AVDD AVDD sg13_hv_pmos w=85.5u l=1u ng=10 m=1
+XM50 net13 VOUT net14 AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM51 net14 net14 AVSS AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM52 net15 net14 AVSS AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM53 AVDD VOUT net15 AVSS sg13_hv_nmos w=100u l=0.5u ng=10 m=1
+XM54 AVSS net15 AVSS AVSS sg13_hv_nmos w=8u l=1u ng=4 m=1
+XM55 net5 net1 AVSS AVSS sg13_hv_nmos w=1u l=0.5u ng=1 m=1
+XM56 net7 AVSS AVSS AVSS sg13_hv_nmos w=14.5u l=0.8u ng=2 m=1
+XM57 net5 AVDD AVDD AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM58 net6 AVSS AVSS AVSS sg13_hv_nmos w=12.5u l=1u ng=2 m=1
+XM59 net5 AVSS AVSS AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+XM60 net4 AVDD AVDD AVDD sg13_hv_pmos w=42.5u l=1u ng=10 m=1
+XM61 net14 AVSS AVSS AVSS sg13_hv_nmos w=12u l=1u ng=2 m=1
+.ends
+
+.GLOBAL GND
+.end

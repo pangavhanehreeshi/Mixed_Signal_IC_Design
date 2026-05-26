@@ -40,7 +40,7 @@ N -220 -80 -220 -50 {lab=clk}
 N 10 -50 30 -50 {lab=clk}
 C {vcvs.sym} -310 -70 0 0 {name=E1 value=1}
 C {switch_ngspice.sym} -240 -120 3 0 {name=S1 model=SW1
-device_model=".MODEL SW1 SW( VT=0.9 VH=0.01 RON=0.01 ROFF=10G )"}
+device_model=".MODEL SW1 SW( VT=0.1 VH=0.0 RON=0.01 ROFF=10G )"}
 C {vcvs.sym} -60 -70 0 0 {name=E2 value=1}
 C {capa.sym} -160 -70 0 0 {name=C1
 m=1
@@ -51,7 +51,7 @@ C {gnd.sym} -60 -30 0 0 {name=l1 lab=GND}
 C {gnd.sym} -160 -30 0 0 {name=l2 lab=GND}
 C {gnd.sym} -310 -30 0 0 {name=l3 lab=GND}
 C {switch_ngspice.sym} 30 -120 3 0 {name=S2 model=SW1
-device_model=".MODEL SW1 SW( VT=0.9 VH=0.01 RON=0.01 ROFF=10G )"}
+device_model=".MODEL SW1 SW( VT=0.1 VH=0.0 RON=0.01 ROFF=10G )"}
 C {capa.sym} 150 -70 0 0 {name=C2
 m=1
 value=100p
